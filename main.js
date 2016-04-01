@@ -29,6 +29,8 @@ layer.scene.subscribe({
     scene.layers.buildings.data.source = 'sfbuildings'
     // This prevents sfbuildings from being filtered out
     delete scene.layers.buildings.extrude.filter
+    // This removes the scaling effect that happens on zoom
+    delete scene.styles['scale-buildings']
     // Don't fictionally extrude buildings
     scene.layers.buildings.extrude.draw.polygons.extrude = function() { return feature.height || 0; }
     scene.layers.buildings.extrude.draw.lines.extrude = function() { return feature.height || 0; }

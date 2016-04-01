@@ -674,24 +674,24 @@ styles:
                         return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
                     }
 
-    scale-buildings:
-        shaders:
-            blocks:
-                position: |
-                    // scale buildings based on zoom
-                    float zoom = u_map_position.z;
-                    float min = .1;       // minimum building scale
-                    float midpoint = 16.; // middle of zoom range
-                    float inspeed = .1;   // number of zooms to scale buildings up
-                    float outspeed = 2.;  // number of zooms to scale buildings back down
-                    float e = 0.;
+    # scale-buildings:
+    #     shaders:
+    #         blocks:
+    #             position: |
+    #                 // scale buildings based on zoom
+    #                 float zoom = u_map_position.z;
+    #                 float min = .1;       // minimum building scale
+    #                 float midpoint = 16.; // middle of zoom range
+    #                 float inspeed = .1;   // number of zooms to scale buildings up
+    #                 float outspeed = 2.;  // number of zooms to scale buildings back down
+    #                 float e = 0.;
 
-                    if (zoom >= midpoint) {
-                        e = (zoom - midpoint) / (outspeed * .2);
-                    } else {
-                        e = abs(zoom - midpoint) / inspeed;
-                    }
-                    position.z *= ((1. - min) / (1. + (exp(e)))) + min;
+    #                 if (zoom >= midpoint) {
+    #                     e = (zoom - midpoint) / (outspeed * .2);
+    #                 } else {
+    #                     e = abs(zoom - midpoint) / inspeed;
+    #                 }
+    #                 position.z *= ((1. - min) / (1. + (exp(e)))) + min;
 
     building-grid:
         base: polygons
@@ -2444,13 +2444,13 @@ layers:
                     visible: true
                     order: 438
                     style: building-grid
-                    extrude: function() { return feature.height || 20; }
+                    extrude: function() { return feature.height || 0; }
                     color: [0.892,0.880,0.878]
                 lines:
                     visible: true
                     order: 439
                     style: building-lines
-                    extrude: function() { return feature.height || 20; }
+                    extrude: function() { return feature.height || 0; }
 
         # landuse-specific rules
         in_park:
