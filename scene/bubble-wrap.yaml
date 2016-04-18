@@ -382,16 +382,11 @@ sources:
         #url:  http://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.mvt
         #enforce_winding: true  #because Tangram v0.4 and tiles v0.5-pre don't play nice
         #url:  //localhost:8080/osm/all/{z}/{x}/{y}.mvt
-        url:  https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-TZJgMv2
+        url:  https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-HqUVidw
         # road labels in Tangram JS are broken when overzooming, set max_zoom: 18 to preview fix
         max_zoom: 16
 
-    sfbuildings:
-        type: GeoJSON
-        url:  //s3-us-west-2.amazonaws.com/openmassing/tiles/us/ca/san_francisco/{z}/{x}/{y}.json.gz
-        #url:  /free/us/ca/san_francisco/output/{z}/{x}/{y}.json
-        max_zoom: 16
-        min_zoom: 16
+
     # Only enable this for local debug, should not be enabled for prod (app inserts these at runtime)
     # These are all in San Francisco, California
 
@@ -674,24 +669,24 @@ styles:
                         return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
                     }
 
-    # scale-buildings:
-    #     shaders:
-    #         blocks:
-    #             position: |
-    #                 // scale buildings based on zoom
-    #                 float zoom = u_map_position.z;
-    #                 float min = .1;       // minimum building scale
-    #                 float midpoint = 16.; // middle of zoom range
-    #                 float inspeed = .1;   // number of zooms to scale buildings up
-    #                 float outspeed = 2.;  // number of zooms to scale buildings back down
-    #                 float e = 0.;
+    scale-buildings:
+        shaders:
+            blocks:
+                position: |
+                    // scale buildings based on zoom
+                    float zoom = u_map_position.z;
+                    float min = .1;       // minimum building scale
+                    float midpoint = 16.; // middle of zoom range
+                    float inspeed = .1;   // number of zooms to scale buildings up
+                    float outspeed = 2.;  // number of zooms to scale buildings back down
+                    float e = 0.;
 
-    #                 if (zoom >= midpoint) {
-    #                     e = (zoom - midpoint) / (outspeed * .2);
-    #                 } else {
-    #                     e = abs(zoom - midpoint) / inspeed;
-    #                 }
-    #                 position.z *= ((1. - min) / (1. + (exp(e)))) + min;
+                    if (zoom >= midpoint) {
+                        e = (zoom - midpoint) / (outspeed * .2);
+                    } else {
+                        e = abs(zoom - midpoint) / inspeed;
+                    }
+                    position.z *= ((1. - min) / (1. + (exp(e)))) + min;
 
     building-grid:
         base: polygons
@@ -2380,8 +2375,7 @@ layers:
                         order: function() { return feature.sort_key; }
 
     buildings:
-        # data: { source: osm, layer: buildings }
-        data: { source: sfbuildings }
+        data: { source: osm, layer: buildings }
         filter:
             not: { location: underground }
         # set default footprint and extrusion draw properties, but don't draw by default (rules below will turn visibility on)
@@ -2428,29 +2422,29 @@ layers:
 
         # 3d buildings
         extrude:
-            # filter:
-            #     any:
-            #         - { $zoom: [15], height: { min: 190 } }
-            #         - { $zoom: [15], area: { min: 5000 } }
-            #         - { $zoom: [15], volume: { min: 100000 } }
-            #         - { $zoom: [16], height: { min: 100 } }
-            #         - { $zoom: [16], area: { min: 3500 } }
-            #         - { $zoom: [16], volume: { min: 50000 } }
-            #         - { $zoom: [17], area: { min: 500 } }
-            #         - { $zoom: [17], volume: { min: 15000 } }
-            #         - { $zoom: { min: 18 } }
+            filter:
+                any:
+                    - { $zoom: [15], height: { min: 190 } }
+                    - { $zoom: [15], area: { min: 5000 } }
+                    - { $zoom: [15], volume: { min: 100000 } }
+                    - { $zoom: [16], height: { min: 100 } }
+                    - { $zoom: [16], area: { min: 3500 } }
+                    - { $zoom: [16], volume: { min: 50000 } }
+                    - { $zoom: [17], area: { min: 500 } }
+                    - { $zoom: [17], volume: { min: 15000 } }
+                    - { $zoom: { min: 18 } }
             draw:
                 polygons:
                     visible: true
                     order: 438
                     style: building-grid
-                    extrude: function() { return feature.height || 0; }
+                    extrude: function() { return feature.height || 20; }
                     color: [0.892,0.880,0.878]
                 lines:
                     visible: true
                     order: 439
                     style: building-lines
-                    extrude: function() { return feature.height || 0; }
+                    extrude: function() { return feature.height || 20; }
 
         # landuse-specific rules
         in_park:

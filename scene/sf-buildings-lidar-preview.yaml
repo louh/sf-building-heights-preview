@@ -1,0 +1,32 @@
+import: https://mapzen.com/carto/bubble-wrap-style/1.1/bubble-wrap.yaml
+# import: bubble-wrap.yaml
+
+sources:
+    # Use demo-specific vector tiles API key
+    osm:
+        url: https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-TZJgMv2
+    sfbuildings:
+        type: GeoJSON
+        url: https://s3-us-west-2.amazonaws.com/openmassing/tiles/us/ca/san_francisco/{z}/{x}/{y}.json.gz
+        min_zoom: 16
+        max_zoom: 16
+
+layers:
+    buildings:
+        data:
+            source: sfbuildings
+        # This prevents sfbuildings from being filtered out
+        extrude:
+            filter: null
+            # Don't fictionally extrude buildings
+            draw:
+                polygons:
+                    extrude: function() { return feature.height || 0; }
+                lines:
+                    extrude: function() { return feature.height || 0; }
+
+styles:
+    # This removes the scaling effect that happens on zoom
+    # You can't just delete the style, you have to delete the sub-prop of the style
+    scale-buildings:
+        shaders: null
