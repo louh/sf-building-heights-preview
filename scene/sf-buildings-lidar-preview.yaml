@@ -1,5 +1,4 @@
-import: https://mapzen.com/carto/bubble-wrap-style/1.1/bubble-wrap.yaml
-# import: bubble-wrap.yaml
+import: https://mapzen.com/carto/bubble-wrap-style/2.0/bubble-wrap.yaml
 
 sources:
     # Use demo-specific vector tiles API key
