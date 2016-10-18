@@ -1,6 +1,4 @@
 'use strict'
-// API key borrowed from curblines
-var VECTOR_TILES_API_KEY = 'vector-tiles-TZJgMv2'
 
 var map = L.map('map').setView([37.79244, -122.39987], 16)
 var hash = new L.Hash(map)
@@ -19,7 +17,7 @@ var buildingsMode = 'sf'
 buttonEl.addEventListener('click', function (e) {
   if (buildingsMode === 'sf') {
     layer.scene.config.layers.buildings.data = {
-      source: 'osm',
+      source: 'mapzen',
       layer: 'buildings'
     }
     layer.scene.updateConfig({ rebuild: true })
@@ -36,4 +34,3 @@ buttonEl.addEventListener('click', function (e) {
     buttonEl.textContent = 'Switch to OSM data'
   }
 })
-

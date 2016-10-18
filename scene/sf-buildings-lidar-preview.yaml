@@ -1,9 +1,10 @@
-import: https://mapzen.com/carto/bubble-wrap-style/2.0/bubble-wrap.yaml
+import: https://mapzen.com/carto/bubble-wrap-style/5/bubble-wrap.yaml
 
 sources:
     # Use demo-specific vector tiles API key
-    osm:
-        url: https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-TZJgMv2
+    mapzen:
+        url_params:
+            api_key: vector-tiles-TZJgMv2
     sfbuildings:
         type: GeoJSON
         url: https://s3-us-west-2.amazonaws.com/openmassing/tiles/us/ca/san_francisco/{z}/{x}/{y}.json.gz
@@ -14,15 +15,18 @@ layers:
     buildings:
         data:
             source: sfbuildings
-        # This prevents sfbuildings from being filtered out
-        extrude:
+
+        footprints:
+            # Prevents sfbuildings from being filtered out
             filter: null
-            # Don't fictionally extrude buildings
-            draw:
-                polygons:
-                    extrude: function() { return feature.height || 0; }
-                lines:
-                    extrude: function() { return feature.height || 0; }
+            extrude:
+                filter: null
+                # Don't fictionally extrude buildings
+                draw:
+                    polygons:
+                        extrude: function() { return feature.height || 0; }
+                    lines:
+                        extrude: function() { return feature.height || 0; }
 
 styles:
     # This removes the scaling effect that happens on zoom
