@@ -1,35 +1,35 @@
-import: https://mapzen.com/carto/bubble-wrap-style/5/bubble-wrap.yaml
+import: https://mapzen.com/carto/bubble-wrap-style/bubble-wrap.yaml
 
 sources:
-    # Use demo-specific vector tiles API key
-    mapzen:
-        url_params:
-            api_key: vector-tiles-TZJgMv2
-    sfbuildings:
-        type: GeoJSON
-        url: https://s3-us-west-2.amazonaws.com/openmassing/tiles/us/ca/san_francisco/{z}/{x}/{y}.json.gz
-        min_zoom: 16
-        max_zoom: 16
+  # Use demo-specific vector tiles API key
+  mapzen:
+    url_params:
+      api_key: vector-tiles-TZJgMv2
+  sfbuildings:
+    type: GeoJSON
+    url: https://s3-us-west-2.amazonaws.com/openmassing/tiles/us/ca/san_francisco/{z}/{x}/{y}.json.gz
+    min_zoom: 16
+    max_zoom: 16
 
 layers:
-    buildings:
-        data:
-            source: sfbuildings
+  buildings:
+    data:
+      source: sfbuildings
 
-        footprints:
-            # Prevents sfbuildings from being filtered out
-            filter: null
-            extrude:
-                filter: null
-                # Don't fictionally extrude buildings
-                draw:
-                    polygons:
-                        extrude: function() { return feature.height || 0; }
-                    lines:
-                        extrude: function() { return feature.height || 0; }
+    footprints:
+      # Prevents sfbuildings from being filtered out
+      filter: null
+      extrude:
+        filter: null
+        # Don't fictionally extrude buildings
+        draw:
+          polygons:
+            extrude: function() { return feature.height || 0; }
+          lines:
+            extrude: function() { return feature.height || 0; }
 
 styles:
-    # This removes the scaling effect that happens on zoom
-    # You can't just delete the style, you have to delete the sub-prop of the style
-    scale-buildings:
-        shaders: null
+  # This removes the scaling effect that happens on zoom
+  # You can't just delete the style, you have to delete the sub-prop of the style
+  scale-buildings:
+    shaders: null
